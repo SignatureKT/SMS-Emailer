@@ -11,6 +11,7 @@ def checkTableExists(conn, tablename):
         return True
     return False
 
+#check if record exist in table
 def checkCustomerExist(conn, item):
     conn.execute("""
         SELECT *
@@ -21,20 +22,39 @@ def checkCustomerExist(conn, item):
         return True
     return False
 
-#create a connection
-conn = sqlite3.connect('customer.db')
+#Query the database and return all records
+def show_all():
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("SELECT rowid, * FROM customers")
+    list(map(print, c.fetchall()))
+    conn.commit()
+    conn.close()
 
-#Create a cursor
-c = conn.cursor()
+def createEmailTable():
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    #Create a table
+    if not checkTableExists(c, 'customers'):
+        c.execute("""CREATE TABLE customers (
+                first_name text,
+                last_name text,
+                email text
+                )"""
+        )
+    conn.commit()
+    conn.close()
 
-#Create a table
-if not checkTableExists(c, 'customers'):
-    c.execute("""CREATE TABLE customers (
-            first_name text,
-            last_name text,
-            email text
-            )"""
-    )
+def insertCustomers(manyCustomers):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    #Insert multiple values into table
+    for item in manyCustomers:
+        if not checkCustomerExist(c, item):
+            c.execute("INSERT INTO customers VALUES (?,?,?)", item)
+    conn.commit()
+    conn.close()
+
 
 #Delete table
 #c.execute("DROP TABLE customers")
@@ -45,29 +65,6 @@ if not checkTableExists(c, 'customers'):
 #Update table
 #c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
 
-manyCustomers = [
-    ('Kevin', 'Truong', 'KevinTruong@example.com'),
-    ('Mary', 'Jane', 'MaryJane@example.com'),
-    ('Bob', 'By', 'Bobby@example.com'),
-    ('Daniel', 'Snow', 'DanielSnow@example.com'),
-    ('Joe', 'Baker', 'JoeBaker@example.com'),
-    ('Tom', 'Rain', 'TomRain@exmaple.com'),
-    ('Pat', 'Fried','PatFried@example.com')
-    ]
-
-#Insert multiple values into table
-for item in manyCustomers:
-    if not checkCustomerExist(c, item):
-        c.execute("INSERT INTO customers VALUES (?,?,?)", item)
-
-
-#Query the database - ORDER BY
-c.execute("SELECT rowid, * FROM customers")
-list(map(print, c.fetchall()))
+#Query the database
 #Query list and format
 #for item in c.fetchall(): print(item)
-#Commit our command
-conn.commit()
-
-#Commit our connection
-conn.close()
