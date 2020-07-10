@@ -22,11 +22,18 @@ if not checkTableExists(c, 'customers'):
     c.execute("""CREATE TABLE customers (
             first_name text,
             last_name text,
-            email text) """
+            email text
+            )"""
     )
 
-#Insert values into table
-c.execute("INSERT INTO customers VALUES ('Kevin', 'Truong', 'example@example.com')")
+manyCustomers = [
+    ('Mary', 'Jane', 'MaryJane@exmaple.com'),
+    ('Bob', 'By', 'Bobby@example.com'),
+    ('Daniel', 'Snow', 'DanielSnow@example.com')
+    ]
+
+#Insert multiple values into table
+c.executemany("INSERT INTO customers VALUES (?,?,?)", manyCustomers)
 
 #Commit our command
 conn.commit()
