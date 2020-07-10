@@ -27,13 +27,13 @@ if not checkTableExists(c, 'customers'):
     )
 
 #Delete Records
-c.execute("Delete from customers WHERE rowid = 3")
+#c.execute("Delete from customers WHERE rowid = 3")
 
 #Update table
 #c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
 
-#Query the database 
-c.execute("SELECT rowid, * FROM customers")
+#Query the database - ORDER BY
+c.execute("SELECT rowid, * FROM customers ORDER BY last_name DESC")
 #list(map(print, c.fetchall()))
 #Query list and format
 for item in c.fetchall(): print(item)
