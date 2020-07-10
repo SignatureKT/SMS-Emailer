@@ -26,14 +26,18 @@ if not checkTableExists(c, 'customers'):
             )"""
     )
 
-manyCustomers = [
-    ('Mary', 'Jane', 'MaryJane@exmaple.com'),
-    ('Bob', 'By', 'Bobby@example.com'),
-    ('Daniel', 'Snow', 'DanielSnow@example.com')
-    ]
+#Query the database
+c.execute("SELECT * FROM customers")
+list(map(print, c.fetchall()))
+
+#manyCustomers = [
+#    ('Mary', 'Jane', 'MaryJane@exmaple.com'),
+#    ('Bob', 'By', 'Bobby@example.com'),
+#    ('Daniel', 'Snow', 'DanielSnow@example.com')
+#    ]
 
 #Insert multiple values into table
-c.executemany("INSERT INTO customers VALUES (?,?,?)", manyCustomers)
+#c.executemany("INSERT INTO customers VALUES (?,?,?)", manyCustomers)
 
 #Commit our command
 conn.commit()
