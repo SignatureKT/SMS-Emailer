@@ -1,5 +1,6 @@
 import sqlite3
 
+#check if table exist
 def checkTableExists(conn, tablename):
     conn.execute("""
         SELECT count(name)
@@ -23,6 +24,9 @@ if not checkTableExists(c, 'customers'):
             last_name text,
             email text) """
     )
+
+#Insert values into table
+c.execute("INSERT INTO customers VALUES ('Kevin', 'Truong', 'example@example.com')")
 
 #Commit our command
 conn.commit()
