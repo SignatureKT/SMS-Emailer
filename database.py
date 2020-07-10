@@ -26,14 +26,17 @@ if not checkTableExists(c, 'customers'):
             )"""
     )
 
-#Query the database
-c.execute("SELECT * FROM customers")
+#Update Records
+c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
+
+#Query the database 
+c.execute("SELECT rowid, * FROM customers")
 #list(map(print, c.fetchall()))
 #Query list and format
-for items in c.fetchall(): print(items[0] + ' ' + items[1] + ' ' + items[2])
+for item in c.fetchall(): print(item)
 
 #manyCustomers = [
-#    ('Mary', 'Jane', 'MaryJane@exmaple.com'),
+#    ('Mary', 'Jane', 'MaryJane@example.com'),
 #    ('Bob', 'By', 'Bobby@example.com'),
 #    ('Daniel', 'Snow', 'DanielSnow@example.com')
 #    ]
