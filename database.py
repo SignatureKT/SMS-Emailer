@@ -26,8 +26,11 @@ if not checkTableExists(c, 'customers'):
             )"""
     )
 
-#Update Records
-c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
+#Delete Records
+c.execute("Delete from customers WHERE rowid = 3")
+
+#Update table
+#c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
 
 #Query the database 
 c.execute("SELECT rowid, * FROM customers")
