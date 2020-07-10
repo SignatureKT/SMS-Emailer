@@ -11,6 +11,16 @@ def checkTableExists(conn, tablename):
         return True
     return False
 
+def checkCustomerExist(conn, item):
+    conn.execute("""
+        SELECT *
+        FROM customers
+        WHERE first_name = '{0}' AND last_name = '{1}'
+        """.format(item[0], item[1]))
+    if conn.fetchone():
+        return True
+    return False
+
 #create a connection
 conn = sqlite3.connect('customer.db')
 
@@ -26,26 +36,32 @@ if not checkTableExists(c, 'customers'):
             )"""
     )
 
+#Delete table
+#c.execute("DROP TABLE customers")
+
 #Delete Records
-#c.execute("Delete from customers WHERE rowid = 3")
+#c.execute("DELETE from customers WHERE rowid = 3")
 
 #Update table
 #c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
 
 #Query the database - ORDER BY
-c.execute("SELECT rowid, * FROM customers ORDER BY last_name DESC")
-#list(map(print, c.fetchall()))
+c.execute("SELECT rowid, * FROM customers")
+list(map(print, c.fetchall()))
 #Query list and format
-for item in c.fetchall(): print(item)
+#for item in c.fetchall(): print(item)
 
-#manyCustomers = [
-#    ('Mary', 'Jane', 'MaryJane@example.com'),
-#    ('Bob', 'By', 'Bobby@example.com'),
-#    ('Daniel', 'Snow', 'DanielSnow@example.com')
-#    ]
+manyCustomers = [
+    ('Kevin', 'Truong', 'KevinTruong@example.com'),
+    ('Mary', 'Jane', 'MaryJane@example.com'),
+    ('Bob', 'By', 'Bobby@example.com'),
+    ('Daniel', 'Snow', 'DanielSnow@example.com')
+    ]
 
 #Insert multiple values into table
-#c.executemany("INSERT INTO customers VALUES (?,?,?)", manyCustomers)
+for item in manyCustomers:
+    if not checkCustomerExist(c, item):
+        c.execute("INSERT INTO customers VALUES (?,?,?)", item)
 
 #Commit our command
 conn.commit()
