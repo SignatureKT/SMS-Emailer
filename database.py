@@ -63,7 +63,7 @@ def add_one(customer):
 def delete_one(id):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
-    c.execute("DELETE from customers WHERE rowid = (?)", id)
+    c.execute("DELETE from customers WHERE rowid = (?)", [id])
     conn.commit()
     conn.close()
 

@@ -21,18 +21,34 @@ exmapleCustomers = [
     ('June', 'Renning', 'JuneRenning@example.com')
 ]
 
+def addMultiple():
+    customerDict = []
+    userInput = 'y'
+    while userInput != 'n':
+        if userInput == 'y':
+            customerDict.append(addOneInput())
+            print(customerDict)
+        else:
+            print("Invalid Prompt")
+        print('Continue?[Y/N]:')
+        userInput = input().lower().strip()
+    return customerDict
+
+
 print("To exit the program enter 'exit':")
-userInput = input()
+userInput = input().lower().strip()
 while userInput != 'exit':
     if userInput == 'add':
         database.add_one(addOneInput())
+    elif userInput == 'add+':
+        database.add_many(addMultiple())
     elif userInput == 'delete':
         database.delete_one(deleteOneInput())
     elif userInput == 'show':
         database.show_all()
     elif userInput == 'help':
-        print("The commands are 'exit', 'add', 'show', and 'delete'")
+        print("The commands are 'exit', 'add', 'add+', 'show', and 'delete'")
     else:
         print("Invalid Command. Type in 'help' to see list of commands")
-    userInput = input()
+    userInput = input().lower().strip()
 #database.add_many(exmapleCustomers)
