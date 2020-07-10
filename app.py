@@ -1,13 +1,10 @@
 import database
 
-manyCustomers = [
-    ('Kevin', 'Truong', 'KevinTruong@example.com'),
-    ('Mary', 'Jane', 'MaryJane@example.com'),
-    ('Bob', 'By', 'Bobby@example.com'),
-    ('Daniel', 'Snow', 'DanielSnow@example.com'),
-    ('Joe', 'Baker', 'JoeBaker@example.com'),
-    ('Tom', 'Rain', 'TomRain@exmaple.com'),
-    ('Pat', 'Fried','PatFried@example.com')
-    ]
-database.insertCustomers(manyCustomers)
+print('What is the first name you want to put into the table:')
+firstName = input()
+print('last name:')
+lastName = input()
+print('email:')
+email = input()
+database.add_one(firstName, lastName, email)
 database.show_all()

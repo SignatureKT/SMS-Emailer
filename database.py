@@ -45,13 +45,11 @@ def createEmailTable():
     conn.commit()
     conn.close()
 
-def insertCustomers(manyCustomers):
+# Add a new record to the table
+def add_one(first, last, email):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
-    #Insert multiple values into table
-    for item in manyCustomers:
-        if not checkCustomerExist(c, item):
-            c.execute("INSERT INTO customers VALUES (?,?,?)", item)
+    c.execute("INSERT INTO customers VALUES (?,?,?)", (first, last, email))
     conn.commit()
     conn.close()
 
