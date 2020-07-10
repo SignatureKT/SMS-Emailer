@@ -45,17 +45,14 @@ if not checkTableExists(c, 'customers'):
 #Update table
 #c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
 
-#Query the database - ORDER BY
-c.execute("SELECT rowid, * FROM customers")
-list(map(print, c.fetchall()))
-#Query list and format
-#for item in c.fetchall(): print(item)
-
 manyCustomers = [
     ('Kevin', 'Truong', 'KevinTruong@example.com'),
     ('Mary', 'Jane', 'MaryJane@example.com'),
     ('Bob', 'By', 'Bobby@example.com'),
-    ('Daniel', 'Snow', 'DanielSnow@example.com')
+    ('Daniel', 'Snow', 'DanielSnow@example.com'),
+    ('Joe', 'Baker', 'JoeBaker@example.com'),
+    ('Tom', 'Rain', 'TomRain@exmaple.com'),
+    ('Pat', 'Fried','PatFried@example.com')
     ]
 
 #Insert multiple values into table
@@ -63,6 +60,12 @@ for item in manyCustomers:
     if not checkCustomerExist(c, item):
         c.execute("INSERT INTO customers VALUES (?,?,?)", item)
 
+
+#Query the database - ORDER BY
+c.execute("SELECT rowid, * FROM customers")
+list(map(print, c.fetchall()))
+#Query list and format
+#for item in c.fetchall(): print(item)
 #Commit our command
 conn.commit()
 
