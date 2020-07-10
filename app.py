@@ -1,5 +1,5 @@
 import database
-import sys
+
 
 def addOneInput():
     print('What is the first name you want to put into the table:')
@@ -21,7 +21,18 @@ exmapleCustomers = [
     ('June', 'Renning', 'JuneRenning@example.com')
 ]
 
-#database.add_one(addOneInput())
-database.add_many(exmapleCustomers)
-#database.delete_one(deleteOneInput())
-database.show_all()
+print("To exit the program enter 'exit':")
+userInput = input()
+while userInput != 'exit':
+    if userInput == 'add':
+        database.add_one(addOneInput())
+    elif userInput == 'delete':
+        database.delete_one(deleteOneInput())
+    elif userInput == 'show':
+        database.show_all()
+    elif userInput == 'help':
+        print("The commands are 'exit', 'add', 'show', and 'delete'")
+    else:
+        print("Invalid Command. Type in 'help' to see list of commands")
+    userInput = input()
+#database.add_many(exmapleCustomers)
