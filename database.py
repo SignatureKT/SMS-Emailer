@@ -46,13 +46,19 @@ def createEmailTable():
     conn.close()
 
 # Add a new record to the table
-def add_one(first, last, email):
+def add_one(customer):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
-    c.execute("INSERT INTO customers VALUES (?,?,?)", (first, last, email))
+    c.execute("INSERT INTO customers VALUES (?,?,?)", customer)
     conn.commit()
     conn.close()
 
+def delete_one(id):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("DELETE from customers WHERE rowid = (?)", id)
+    conn.commit()
+    conn.close()
 
 #Delete table
 #c.execute("DROP TABLE customers")
