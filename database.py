@@ -45,6 +45,13 @@ def createEmailTable():
     conn.commit()
     conn.close()
 
+def add_many(list):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.executemany("INSERT INTO customers VALUES (?,?,?)", (list))
+    conn.commit()
+    conn.close()
+
 # Add a new record to the table
 def add_one(customer):
     conn = sqlite3.connect('customer.db')

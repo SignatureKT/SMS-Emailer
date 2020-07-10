@@ -14,6 +14,14 @@ def deleteOneInput():
     database.show_all()
     print('Which id would you like to delete:')
     return input()
+
+exmapleCustomers = [
+    ('Jose', 'Moris', 'JoseMoris@example.com'),
+    ('Sara', 'Wills', 'SaraWills@example.com'),
+    ('June', 'Renning', 'JuneRenning@example.com')
+]
+
 #database.add_one(addOneInput())
-database.delete_one(deleteOneInput())
+database.add_many(exmapleCustomers)
+#database.delete_one(deleteOneInput())
 database.show_all()
