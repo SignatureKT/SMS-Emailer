@@ -44,6 +44,7 @@ def createEmailTable():
     conn.commit()
     conn.close()
 
+#Recieves a list of three values records them into the table
 def add_many(list):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -51,7 +52,7 @@ def add_many(list):
     conn.commit()
     conn.close()
 
-# Add a new record to the table
+#Add a new record to the table
 def add_one(customer):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -59,6 +60,7 @@ def add_one(customer):
     conn.commit()
     conn.close()
 
+#Recieves a unique ID and delete the record that matches the ID
 def delete_one(id):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -66,6 +68,7 @@ def delete_one(id):
     conn.commit()
     conn.close()
 
+#Query columns based on user input
 def query(item):
     if item[0] == 'rowid':
         queryID(item[1])
@@ -76,6 +79,7 @@ def query(item):
     elif item[0] == 'email':
         queryEmail(item[1])
 
+#Query based on ID
 def queryID(value):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -83,6 +87,7 @@ def queryID(value):
     list(map(print, c.fetchall()))
     conn.close()
 
+#Query based on first_name
 def queryFirstName(value):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -90,6 +95,7 @@ def queryFirstName(value):
     list(map(print, c.fetchall()))
     c.close()
 
+#Query based on last_name
 def queryLastName(value):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
@@ -97,12 +103,52 @@ def queryLastName(value):
     list(map(print, c.fetchall()))
     conn.close()
 
+#Query based on Email
 def queryEmail(value):
     conn = sqlite3.connect('customer.db')
     c = conn.cursor()
     c.execute("SELECT rowid, * FROM customers WHERE email = (?)", [value])
     list(map(print, c.fetchall()))
     c.close()
+
+#Get input from user
+def addOneInput():
+    print('What is the first name you want to put into the table:')
+    firstName = input()
+    print('last name:')
+    lastName = input()
+    print('email:')
+    email = input()
+    return firstName, lastName, email
+
+#Get input from user
+def deleteOneInput():
+    show_all()
+    print('Which id would you like to delete:')
+    return input()
+
+#Creates a list and get multiple input from user
+def addMultiple():
+    customerDict = []
+    userInput = 'y'
+    while userInput != 'n':
+        if userInput == 'y':
+            customerDict.append(addOneInput())
+            print(customerDict)
+        else:
+            print("Invalid Prompt")
+        print('Continue?[Y/N]:')
+        userInput = input().lower().strip()
+    return customerDict
+
+#Get input for columns and value from user
+def showInput():
+    print('What is the key you like to use to search (rowid, first_name, last_name, or email):')
+    key = input()
+    print('What is the value you would like to search:')
+    value = input()
+    return key, value
+
 #Delete table
 #c.execute("DROP TABLE customers")
 
