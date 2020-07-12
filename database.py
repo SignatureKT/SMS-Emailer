@@ -28,7 +28,6 @@ def show_all():
     c = conn.cursor()
     c.execute("SELECT rowid, * FROM customers")
     list(map(print, c.fetchall()))
-    conn.commit()
     conn.close()
 
 def createEmailTable():
@@ -67,6 +66,43 @@ def delete_one(id):
     conn.commit()
     conn.close()
 
+def query(item):
+    if item[0] == 'rowid':
+        queryID(item[1])
+    elif item[0] == 'first_name':
+        queryFirstName(item[1])
+    elif item[0] == 'last_name':
+        queryLastName(item[1])
+    elif item[0] == 'email':
+        queryEmail(item[1])
+
+def queryID(value):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("SELECT rowid, * FROM customers WHERE rowid = (?)", [value])
+    list(map(print, c.fetchall()))
+    conn.close()
+
+def queryFirstName(value):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("SELECT rowid, * FROM customers WHERE first_name = (?)", [value])
+    list(map(print, c.fetchall()))
+    c.close()
+
+def queryLastName(value):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("SELECT rowid, * FROM customers WHERE last_name = (?)", [value])
+    list(map(print, c.fetchall()))
+    conn.close()
+
+def queryEmail(value):
+    conn = sqlite3.connect('customer.db')
+    c = conn.cursor()
+    c.execute("SELECT rowid, * FROM customers WHERE email = (?)", [value])
+    list(map(print, c.fetchall()))
+    c.close()
 #Delete table
 #c.execute("DROP TABLE customers")
 
