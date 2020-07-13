@@ -84,44 +84,9 @@ def delete_one(databaseName, tableName, id):
 
 #Query columns based on user input
 def query(databaseName, tableName, item):
-    if item[0] == 'rowid':
-        queryID(databaseName, tableName, item[1])
-    elif item[0] == 'first_name':
-        queryFirstName(databaseName,tableName, item[1])
-    elif item[0] == 'last_name':
-        queryLastName(databaseName, tableName, item[1])
-    elif item[0] == 'email':
-        queryEmail(databaseName, tableName, item[1])
-
-#Query based on ID
-def queryID(databaseName, tableName, value):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE rowid = '{value}'")
-    list(map(print, c.fetchall()))
-    conn.close()
-
-#Query based on first_name
-def queryFirstName(databaseName, tableName, value):
-    conn = sqlite3.connect(databaseName)
-    c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE first_name = '{value}'")
-    list(map(print, c.fetchall()))
-    c.close()
-
-#Query based on last_name
-def queryLastName(databaseName, tableName, value):
-    conn = sqlite3.connect(databaseName)
-    c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE last_name = '{value}'")
-    list(map(print, c.fetchall()))
-    conn.close()
-
-#Query based on Email
-def queryEmail(databaseName, tableName, value):
-    conn = sqlite3.connect(databaseName)
-    c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE email = '{value}'")
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE {item[0]} = '{item[1]}'")
     list(map(print, c.fetchall()))
     c.close()
 
