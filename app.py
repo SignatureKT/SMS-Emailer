@@ -7,7 +7,8 @@ commandsHelp = [
     'delete - Deletes a record in the table',
     'show - Displays records from the table by searching the table\'s columns and name of the search',
     'showall - Displays all records from the table',
-    'help - Displays all commands and usage'
+    'mail - mails to the people in the tables',
+    'help - Displays all commands and usage',
     'exit - Exits the application'
 ]
 
@@ -18,6 +19,7 @@ commands = [
     'delete',
     'show',
     'showall',
+    'mail',
     'help',
     'exit'
 ]
@@ -44,6 +46,8 @@ def main():
         elif userInput == commands[5]:
             database.show_all(databaseName, getTableNameInput())
         elif userInput == commands[6]:
+            subprocess.run([sys.executable, f"./mails.py", f'{databaseName}', f'{getTableNameInput()}'])
+        elif userInput == commands[7]:
             lineBreak()
             for string in commandsHelp: print(f'{string}\n')
             lineBreak()
@@ -93,7 +97,7 @@ def showInput():
 
 #get input for tables
 def getTableNameInput():
-    print("Which table would you like to look at:")
+    print("Which table would you like to look/create at:")
     return input()
 
 #def get database from user
