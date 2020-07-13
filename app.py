@@ -1,31 +1,54 @@
-import database
-import sys
+import database, sys, subprocess, os
+
+commandsHelp = [
+    'createtable - Creates a table in the database',
+    'add - Creates a record in the table',
+    'add+ - Creates mulitple records in the table',
+    'delete - Deletes a record in the table',
+    'show - Displays records from the table by searching the table\'s columns and name of the search',
+    'showall - Displays all records from the table',
+    'help - Displays all commands and usage'
+    'exit - Exits the application'
+]
+
+commands = [
+    'createtable',
+    'add',
+    'add+',
+    'delete',
+    'show',
+    'showall',
+    'help',
+    'exit'
+]
 
 def main():
     #recieve user input to create/open database
     databaseName = getDatabase()
     #if there is no table in the database, the user may create one
     if not database.checkTableExistsDB(databaseName):
-        addTableOption(database)
-    print("To exit the program enter 'exit'")
+        addTableOption(databaseName)
+    print("To exit the program enter 'exit':")
     userInput = input().lower().strip()
     while userInput != 'exit':
-        if userInput == 'createtable':
+        if userInput == commands[0]:
             database.createTable(databaseName, getTableNameInput())
-        elif userInput == 'add':
+        elif userInput == commands[1]:
             database.add_one(databaseName, getTableNameInput(), addOneInput())
-        elif userInput == 'add+':
+        elif userInput == commands[2]:
             database.add_many(databaseName, getTableNameInput(), addMultiple())
-        elif userInput == 'delete':
+        elif userInput == commands[3]:
             database.delete_one(databaseName, getTableNameInput(), deleteOneInput(databaseName))
-        elif userInput == 'show':
+        elif userInput == commands[4]:
             database.query(databaseName, getTableNameInput(), showInput())
-        elif userInput == 'showall':
+        elif userInput == commands[5]:
             database.show_all(databaseName, getTableNameInput())
-        elif userInput == 'help':
-            print("The commands are 'exit', 'add', 'add+', 'showall', 'show', and 'delete', 'createtable'")
+        elif userInput == commands[6]:
+            lineBreak()
+            for string in commandsHelp: print(f'{string}\n')
+            lineBreak()
         else:
-            print("Invalid Command. Type in 'help' to see list of commands")
+            print("Invalid Command. Type in 'help' to see list of commands and usage")
         userInput = input().lower().strip()
 
 ############################FUNCTIONS##############################################
@@ -83,4 +106,16 @@ def addTableOption(databaseName):
     print(f'There is no table in {databaseName}. Would you like to create one: [y/n]:')
     if input() == 'y':
         database.createTable(databaseName, getTableNameInput())
+
+def lineBreak():
+    rows, columns = subprocess.check_output(['stty', 'size']).decode().split()
+    x = 0
+    line = ''
+    while x < int(columns):
+        line += '='
+        x += 1
+    print(line)
+
+
+
 main()
