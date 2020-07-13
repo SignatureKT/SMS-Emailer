@@ -23,7 +23,6 @@ def main(databaseName, tableName):
             f.write("Hello, This is a subject!")
 
         with open(f'{fileDir}/body.txt', 'w+') as f:
-            
             f.write(f"""{firstName} {lastName},\nThis is a test email to be sent to {email}.
             """)
 

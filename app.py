@@ -8,6 +8,9 @@ commandsHelp = [
     'show - Displays records from the table by searching the table\'s columns and name of the search',
     'showall - Displays all records from the table',
     'mail - mails to the people in the tables',
+    'showtables - show all tables in the current database',
+    'deletetable - delete table from the database',
+    'changedb - changes current database to a new database'
     'help - Displays all commands and usage',
     'exit - Exits the application'
 ]
@@ -20,6 +23,9 @@ commands = [
     'show',
     'showall',
     'mail',
+    'showtables',
+    'deletetable',
+    'changedb',
     'help',
     'exit'
 ]
@@ -48,14 +54,18 @@ def main():
         elif userInput == commands[6]:
             subprocess.run([sys.executable, f"./mails.py", f'{databaseName}', f'{getTableNameInput()}'])
         elif userInput == commands[7]:
+            database.showTables(databaseName)
+        elif userInput == commands[8]:
+            database.deleteTable(databaseName, getTableNameInput())
+        elif userInput == commands[9]:
+            databaseName = getNewDatabaseInput()
+        elif userInput == commands[10]:
             lineBreak()
             for string in commandsHelp: print(f'{string}\n')
             lineBreak()
         else:
             print("Invalid Command. Type in 'help' to see list of commands and usage")
         userInput = input().lower().strip()
-
-############################FUNCTIONS##############################################
 
 #Get input from user
 def addOneInput():
@@ -118,8 +128,12 @@ def lineBreak():
     while x < int(columns):
         line += '='
         x += 1
-    print(line)
+    print(f'{line}\n')
 
+def getNewDatabaseInput():
+    print('Which database would you like to switch to:')
+    databaseName = input().lower().strip() + '.db'
+    return databaseName
 
-
+    
 main()

@@ -97,7 +97,7 @@ def query(databaseName, tableName, item):
 def queryID(databaseName, tableName, value):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE rowid = {value}")
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE rowid = '{value}'")
     list(map(print, c.fetchall()))
     conn.close()
 
@@ -105,7 +105,7 @@ def queryID(databaseName, tableName, value):
 def queryFirstName(databaseName, tableName, value):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE first_name = {value}")
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE first_name = '{value}'")
     list(map(print, c.fetchall()))
     c.close()
 
@@ -113,7 +113,7 @@ def queryFirstName(databaseName, tableName, value):
 def queryLastName(databaseName, tableName, value):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE last_name = {value}")
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE last_name = '{value}'")
     list(map(print, c.fetchall()))
     conn.close()
 
@@ -121,19 +121,23 @@ def queryLastName(databaseName, tableName, value):
 def queryEmail(databaseName, tableName, value):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE email = {value}")
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE email = '{value}'")
     list(map(print, c.fetchall()))
     c.close()
 
-#Delete table
-#c.execute("DROP TABLE customers")
+def showTables(databaseName):
+    conn = sqlite3.connect(databaseName)
+    c = conn.cursor()
+    c.execute(f"SELECT name FROM sqlite_master WHERE type='table'")
+    print(f'{databaseName} tables: ')
+    list(map(print, c.fetchall()))
+    c.close()
 
-#Delete Records
-#c.execute("DELETE from customers WHERE rowid = 3")
+def deleteTable(databaseName, tableName):
+    conn = sqlite3.connect()
+    c = conn.cursor()
+    c.execute(f"DROP TABLE {tableName}")
+    c.close()
 
 #Update table
 #c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
-
-#Query the database
-#Query list and format
-#for item in c.fetchall(): print(item)
