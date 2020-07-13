@@ -11,31 +11,45 @@ def checkTableExists(conn, tablename):
         return True
     return False
 
+#check if table exists in database
+def checkTableExistsDB(databaseName):
+    conn = sqlite3.connect(databaseName)
+    c = conn.cursor()
+    c.execute(f"""
+        SELECT count(name)
+        FROM sqlite_master
+        WHERE type='table'
+    """)
+    if c.fetchone()[0] == 1:
+        c.close()
+        return True
+    c.close()
+    return False
 #check if record exist in table
-def checkCustomerExist(conn, item):
-    conn.execute("""
+def checkCustomerExist(conn, tableName, item):
+    conn.execute(f"""
         SELECT *
-        FROM customers
-        WHERE first_name = '{0}' AND last_name = '{1}'
-        """.format(item[0], item[1]))
+        FROM tableName
+        WHERE first_name = '{item[0]}' AND last_name = '{item[1]}'
+        """)
     if conn.fetchone():
         return True
     return False
 
 #Query the database and return all records
-def show_all():
-    conn = sqlite3.connect('customer.db')
+def show_all(databaseName, tableName):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("SELECT rowid, * FROM customers")
+    c.execute(f"SELECT rowid, * FROM {tableName}")
     list(map(print, c.fetchall()))
     conn.close()
 
-def createEmailTable():
-    conn = sqlite3.connect('customer.db')
+def createTable(databaseName, tableName):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
     #Create a table
-    if not checkTableExists(c, 'customers'):
-        c.execute("""CREATE TABLE customers (
+    if not checkTableExists(c, f'{tableName}'):
+        c.execute(f"""CREATE TABLE {tableName} (
                 first_name text,
                 last_name text,
                 email text
@@ -45,109 +59,71 @@ def createEmailTable():
     conn.close()
 
 #Recieves a list of three values records them into the table
-def add_many(list):
-    conn = sqlite3.connect('customer.db')
+def add_many(databaseName, tableName,list):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.executemany("INSERT INTO customers VALUES (?,?,?)", (list))
+    c.executemany(f"INSERT INTO {tableName} VALUES {list}")
     conn.commit()
     conn.close()
 
 #Add a new record to the table
-def add_one(customer):
-    conn = sqlite3.connect('customer.db')
+def add_one(databaseName, tableName, item):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("INSERT INTO customers VALUES (?,?,?)", customer)
+    c.execute(f"INSERT INTO {tableName} VALUES {item}")
     conn.commit()
     conn.close()
 
 #Recieves a unique ID and delete the record that matches the ID
-def delete_one(id):
-    conn = sqlite3.connect('customer.db')
+def delete_one(databaseName, tableName, id):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("DELETE from customers WHERE rowid = (?)", [id])
+    c.execute(f"DELETE from {tableName} WHERE rowid = {id}")
     conn.commit()
     conn.close()
 
 #Query columns based on user input
-def query(item):
+def query(databaseName, tableName, item):
     if item[0] == 'rowid':
-        queryID(item[1])
+        queryID(databaseName, tableName, item[1])
     elif item[0] == 'first_name':
-        queryFirstName(item[1])
+        queryFirstName(databaseName,tableName, item[1])
     elif item[0] == 'last_name':
-        queryLastName(item[1])
+        queryLastName(databaseName, tableName, item[1])
     elif item[0] == 'email':
-        queryEmail(item[1])
+        queryEmail(databaseName, tableName, item[1])
 
 #Query based on ID
-def queryID(value):
-    conn = sqlite3.connect('customer.db')
+def queryID(databaseName, tableName, value):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("SELECT rowid, * FROM customers WHERE rowid = (?)", [value])
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE rowid = {value}")
     list(map(print, c.fetchall()))
     conn.close()
 
 #Query based on first_name
-def queryFirstName(value):
-    conn = sqlite3.connect('customer.db')
+def queryFirstName(databaseName, tableName, value):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("SELECT rowid, * FROM customers WHERE first_name = (?)", [value])
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE first_name = {value}")
     list(map(print, c.fetchall()))
     c.close()
 
 #Query based on last_name
-def queryLastName(value):
-    conn = sqlite3.connect('customer.db')
+def queryLastName(databaseName, tableName, value):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("SELECT rowid, * FROM customers WHERE last_name = (?)", [value])
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE last_name = {value}")
     list(map(print, c.fetchall()))
     conn.close()
 
 #Query based on Email
-def queryEmail(value):
-    conn = sqlite3.connect('customer.db')
+def queryEmail(databaseName, tableName, value):
+    conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute("SELECT rowid, * FROM customers WHERE email = (?)", [value])
+    c.execute(f"SELECT rowid, * FROM {tableName} WHERE email = {value}")
     list(map(print, c.fetchall()))
     c.close()
-
-#Get input from user
-def addOneInput():
-    print('What is the first name you want to put into the table:')
-    firstName = input()
-    print('last name:')
-    lastName = input()
-    print('email:')
-    email = input()
-    return firstName, lastName, email
-
-#Get input from user
-def deleteOneInput():
-    show_all()
-    print('Which id would you like to delete:')
-    return input()
-
-#Creates a list and get multiple input from user
-def addMultiple():
-    customerDict = []
-    userInput = 'y'
-    while userInput != 'n':
-        if userInput == 'y':
-            customerDict.append(addOneInput())
-            print(customerDict)
-        else:
-            print("Invalid Prompt")
-        print('Continue?[Y/N]:')
-        userInput = input().lower().strip()
-    return customerDict
-
-#Get input for columns and value from user
-def showInput():
-    print('What is the key you like to use to search (rowid, first_name, last_name, or email):')
-    key = input()
-    print('What is the value you would like to search:')
-    value = input()
-    return key, value
 
 #Delete table
 #c.execute("DROP TABLE customers")
