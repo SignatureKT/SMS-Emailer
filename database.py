@@ -23,7 +23,7 @@ def checkTableExistsDB(databaseName):
     if c.fetchone()[0] == 1:
         c.close()
         return True
-    c.close()
+    conn.close()
     return False
 #check if record exist in table
 def checkCustomerExist(conn, tableName, item):
@@ -86,23 +86,35 @@ def delete_one(databaseName, tableName, id):
 def query(databaseName, tableName, item):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.execute(f"SELECT rowid, * FROM {tableName} WHERE {item[0]} = '{item[1]}'")
+    try:
+        c.execute(f"SELECT rowid, * FROM {tableName} WHERE {item[0]} = '{item[1]}'")
+    except sqlite3.OperationalError:
+        print('There is no such table!')
+        return 1
     list(map(print, c.fetchall()))
-    c.close()
+    conn.close()
 
+#displays all table within the current database
 def showTables(databaseName):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
     c.execute(f"SELECT name FROM sqlite_master WHERE type='table'")
     print(f'{databaseName} tables: ')
     list(map(print, c.fetchall()))
-    c.close()
+    conn.close()
 
+#deletes a table with current database
 def deleteTable(databaseName, tableName):
     conn = sqlite3.connect()
     c = conn.cursor()
     c.execute(f"DROP TABLE {tableName}")
-    c.close()
+    conn.close()
 
-#Update table
-#c.execute("""UPDATE customers SET first_name = 'Bob' WHERE rowid = 3 """)
+
+#updates record using current database and specified table. item contains table column, table column value, and unique ID value
+def updateTable(databaseName, tableName, item):
+    conn = sqlite3.connect(databaseName)
+    c = conn.cursor()
+    c.execute(f"UPDATE {tableName} SET {item[0]} = '{item[1]}' WHERE rowid = {item[2]}")
+    conn.commit()
+    conn.close()

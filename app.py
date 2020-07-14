@@ -10,7 +10,8 @@ commandsHelp = [
     'mail - mails to the people in the tables',
     'showtables - show all tables in the current database',
     'deletetable - delete table from the database',
-    'changedb - changes current database to a new database'
+    'changedb - changes current database to a new database',
+    'update - updates a record on the table',
     'help - Displays all commands and usage',
     'exit - Exits the application'
 ]
@@ -26,6 +27,7 @@ commands = [
     'showtables',
     'deletetable',
     'changedb',
+    'update',
     'help',
     'exit'
 ]
@@ -60,6 +62,8 @@ def main():
         elif userInput == commands[9]:
             databaseName = getNewDatabaseInput()
         elif userInput == commands[10]:
+            database.updateTable(databaseName, getTableNameInput(), updateInput())
+        elif userInput == commands[11]:
             lineBreak()
             for string in commandsHelp: print(f'{string}\n')
             lineBreak()
@@ -104,6 +108,15 @@ def showInput():
     print('What is the value you would like to search:')
     value = input()
     return key, value
+
+def updateInput():
+    print('What is the key you like to use to search (rowid, first_name, last_name, or email):')
+    key = input()
+    print('What rowid you would like to use to update you record:')
+    rowid = input()
+    print('What would you like to change the value to:')
+    value = input()
+    return key, value, rowid
 
 #get input for tables
 def getTableNameInput():
