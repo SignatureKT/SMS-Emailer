@@ -25,6 +25,7 @@ def checkTableExistsDB(databaseName):
         return True
     conn.close()
     return False
+
 #check if record exist in table
 def checkCustomerExist(conn, tableName, item):
     conn.execute(f"""
@@ -52,17 +53,18 @@ def createTable(databaseName, tableName):
         c.execute(f"""CREATE TABLE {tableName} (
                 first_name text,
                 last_name text,
-                email text
+                email text,
+                phone text
                 )"""
         )
     conn.commit()
     conn.close()
 
 #Recieves a list of three values records them into the table
-def add_many(databaseName, tableName,list):
+def add_many(databaseName, tableName, item):
     conn = sqlite3.connect(databaseName)
     c = conn.cursor()
-    c.executemany(f"INSERT INTO {tableName} VALUES {list}")
+    c.executemany(f"INSERT INTO {tableName} VALUES {item}")
     conn.commit()
     conn.close()
 
