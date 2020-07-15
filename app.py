@@ -6,7 +6,9 @@ commandsHelp = [
     'delete - Deletes a record in the table',
     'show - Displays records from the table by searching the table\'s columns and name of the search',
     'showall - Displays all records from the table',
-    'mail - mails to the people in the tables',
+    'mail - mails to the records using the current database with the specified table',
+    'snedSMS - sends an SMS to the records using the current database with the specifed table',
+    'twilio - same as sendSMS but uses twilio API instead of SMTP',
     'showtables - show all tables in the current database',
     'deletetable - delete table from the database',
     'changedb - changes current database to a new database',
@@ -24,6 +26,8 @@ commands = [
     'show',
     'showall',
     'mail',
+    'sendsms',
+    'twilio',
     'showtables',
     'deletetable',
     'changedb',
@@ -59,16 +63,20 @@ while userInput != 'exit':
     elif userInput == commands[6]:
         subprocess.run([sys.executable, f"./mails.py", f'{databaseName}', f'{user.getTableNameInput()}'])
     elif userInput == commands[7]:
-        database.showTables(databaseName)
+        subprocess.run([sys.executable, f"./sendSMS.py", f'{databaseName}', f'{user.getTableNameInput()}'])
     elif userInput == commands[8]:
-        database.deleteTable(databaseName, user.getTableNameInput())
+        subprocess.run([sys.executable, f"./twilioMsg.py", f'{databaseName}', f'{user.getTableNameInput()}'])
     elif userInput == commands[9]:
-        databaseName = user.getNewDatabaseInput()
+        database.showTables(databaseName)
     elif userInput == commands[10]:
-        user.deleteDatabaseInput()
+        database.deleteTable(databaseName, user.getTableNameInput())
     elif userInput == commands[11]:
-        database.updateTable(databaseName, user.getTableNameInput(), user.updateInput())
+        databaseName = user.getNewDatabaseInput()
     elif userInput == commands[12]:
+        user.deleteDatabaseInput()
+    elif userInput == commands[13]:
+        database.updateTable(databaseName, user.getTableNameInput(), user.updateInput())
+    elif userInput == commands[14]:
         user.lineBreak()
         for string in commandsHelp: print(f'{string}\n')
         user.lineBreak()
