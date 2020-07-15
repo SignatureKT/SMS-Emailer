@@ -21,7 +21,6 @@ def main(databaseName, tableName):
         lastName = c.fetchone()[1]
         c.execute(f"SELECT * FROM {tableName} WHERE rowid = {index+1}")
         email = c.fetchone()[2]
-        conn.close()
         with open(f'{fileDir}/subject.txt', 'w+') as f:
             f.write("Hello, This is a subject!")
         
@@ -37,11 +36,14 @@ def main(databaseName, tableName):
         msg['To'] = email
         with open(f'{fileDir}/body.txt', 'r') as f:
             msg.set_content(f.read())
-
         #sends the message 
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            smtp.send_message(msg)
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        
+            server.send_message(msg)
+            server.close()
+
+    conn.close()
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
