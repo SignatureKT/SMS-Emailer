@@ -10,6 +10,7 @@ commandsHelp = [
     'showtables - show all tables in the current database',
     'deletetable - delete table from the database',
     'changedb - changes current database to a new database',
+    'removedb - removes specified database',
     'update - updates a record on the table',
     'help - Displays all commands and usage',
     'exit - Exits the application'
@@ -26,6 +27,7 @@ commands = [
     'showtables',
     'deletetable',
     'changedb',
+    'removedb',
     'update',
     'help',
     'exit'
@@ -63,8 +65,10 @@ while userInput != 'exit':
     elif userInput == commands[9]:
         databaseName = user.getNewDatabaseInput()
     elif userInput == commands[10]:
-        database.updateTable(databaseName, user.getTableNameInput(), user.updateInput())
+        user.deleteDatabaseInput()
     elif userInput == commands[11]:
+        database.updateTable(databaseName, user.getTableNameInput(), user.updateInput())
+    elif userInput == commands[12]:
         user.lineBreak()
         for string in commandsHelp: print(f'{string}\n')
         user.lineBreak()

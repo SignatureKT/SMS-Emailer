@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, os
 
 #Get input from user
 def addOneInput():
@@ -74,3 +74,15 @@ def getNewDatabaseInput():
     print('Which database would you like to switch to:')
     databaseName = input('database: ').lower().strip() + '.db'
     return databaseName
+
+def deleteDatabaseInput():
+    print('Which database would you like to switch to:')
+    databaseName = input('database:')
+    print(f'Delete {databaseName}? [y/n]')
+    userInput = input()
+    while userInput != 'n':
+        if userInput == 'y':
+            os.remove(databaseName)
+            return 0
+        print(f'Invalid Input. Delete {databaseName}? [y/n]')
+        userInput = input()
